@@ -8,7 +8,8 @@ from src.user.models import User
 
 class CleaningType(models.Model):
     name=models.CharField(max_length=150, verbose_name='Тип уборки')
-    description=models.CharField(max_length=2000, verbose_name='Описание уборки')
+    description=models.TextField(max_length=2500, verbose_name='Описание уборки')
+    subdescription=models.CharField(max_length=2000, verbose_name='Субописание уборки', blank=True, null=True)
     price=models.DecimalField(max_digits=9,decimal_places=2, verbose_name='Цена за кв.м')
     created=models.DateTimeField(auto_now_add=True, verbose_name='Создано')
     updated=models.DateTimeField(auto_now=True, verbose_name='Обновлено')
@@ -17,72 +18,19 @@ class CleaningType(models.Model):
     class Meta:
         verbose_name='Тип уборки'
         verbose_name_plural='Типы уборки'
+        permissions=[
+            
+        ]
     
     def __str__(self):
         return self.name
     
     def get_absolute_url(self):
         return reverse("cleaning_type_detail", kwargs={"pk": self.pk})
+        
     
     
-    
-class CleaningTypeLocation(models.Model):
-    cleaning_type=models.ForeignKey(
-        CleaningType,
-        on_delete=models.PROTECT,
-        verbose_name='Тип уборки',
-        related_name='location'
-    )
-    name=models.CharField(max_length=150, verbose_name='Локация')
-    subname=models.CharField(max_length=150, verbose_name='К какому типу уборки')
-    created=models.DateTimeField(auto_now_add=True, verbose_name='Создано')
-    updated=models.DateTimeField(auto_now=True, verbose_name='Обновлено')
-    is_published=models.BooleanField(default=True, verbose_name='Опубликовано')
-    
-    class Meta:
-        verbose_name='Локация типа уборки'
-        verbose_name_plural='Локации типов уборки'
-    
-    def __str__(self):
-        return f"{self.name}{self.subname}"
-    
-    def get_absolute_url(self):
-        return reverse("cleaning_type_location_detail", kwargs={"pk": self.pk})
-    
-    
-
-class CleaningTypeInclude(models.Model):
-    cleaning_type_locatiion=models.ForeignKey(
-        CleaningTypeLocation,
-        on_delete=models.PROTECT,
-        related_name='include',
-        verbose_name='Локация уборки(включено)',
-        blank=True
-    )
-    name=models.CharField(max_length=500, verbose_name='Категория(что входит в уборку)')
-    created=models.DateTimeField(auto_now_add=True, verbose_name='Создано')
-    updated=models.DateTimeField(auto_now=True, verbose_name='Обновлено')
-    is_published=models.BooleanField(default=True, verbose_name='Опубликовано')
-    
-    class Meta:
-        verbose_name='Что входит в уборку(категория)'
-        verbose_name_plural='Что входит в уборку(категории)'
-    
-    def __str__(self):
-        return self.name
-    
-    def get_absolute_url(self):
-        return reverse("cleaning_type_include_detail", kwargs={"pk": self.pk})
-    
-
-
-class CleaningTypeIncludeList(models.Model):
-    cleaning_type_include=models.ForeignKey(
-        CleaningTypeInclude,
-        on_delete=models.PROTECT,
-        related_name="include_list",
-        verbose_name='Категория(что входит в уборку)'
-    )    
+class CleaningTypeIncludeList(models.Model): 
     name=models.CharField(max_length=1000, verbose_name='что входит в уборку(список)')
     created=models.DateTimeField(auto_now_add=True, verbose_name='Создано')
     updated=models.DateTimeField(auto_now=True, verbose_name='Обновлено')
@@ -100,13 +48,57 @@ class CleaningTypeIncludeList(models.Model):
     
     
 
+class CleaningTypeInclude(models.Model):
+    # cleaning_type_locatiion=models.ForeignKey(
+    #     CleaningTypeLocation,
+    #     on_delete=models.PROTECT,
+    #     related_name='include',
+    #     verbose_name='Локация уборки(включено)',
+    #     blank=True
+    # )
+    include_list=models.ManyToManyField(
+        CleaningTypeIncludeList,
+        verbose_name="Список что входит"
+    )
+    name=models.CharField(max_length=500, verbose_name='Категория(что входит в уборку)')
+    created=models.DateTimeField(auto_now_add=True, verbose_name='Создано')
+    updated=models.DateTimeField(auto_now=True, verbose_name='Обновлено')
+    is_published=models.BooleanField(default=True, verbose_name='Опубликовано')
+    
+    class Meta:
+        verbose_name='Что входит в уборку(категория)'
+        verbose_name_plural='Что входит в уборку(категории)'
+    
+    def __str__(self):
+        return self.name
+    
+    def get_absolute_url(self):
+        return reverse("cleaning_type_include_detail", kwargs={"pk": self.pk})
+    
+    
+    
+class CleaningTypeCanAddList(models.Model): 
+    name=models.CharField(max_length=1000, verbose_name='что можно добавить в уборку(список)')
+    created=models.DateTimeField(auto_now_add=True, verbose_name='Создано')
+    updated=models.DateTimeField(auto_now=True, verbose_name='Обновлено')
+    is_published=models.BooleanField(default=True, verbose_name='Опубликовано')
+    
+    class Meta:
+        verbose_name='Можно добавить(список)'
+        verbose_name_plural='Можно добавить(списки)'
+    
+    def __str__(self):
+        return self.name
+    
+    def get_absolute_url(self):
+        return reverse("cleaning_type_can_add_list_detail", kwargs={"pk": self.pk})
+    
+    
+
 class CleaningTypeCanAdd(models.Model):
-    cleaning_type_locatiion=models.ForeignKey(
-        CleaningTypeLocation,
-        on_delete=models.PROTECT,
-        related_name='can_add',
-        verbose_name='Локация уборки(можно добавить)',
-        blank=True
+    can_add_list=models.ManyToManyField(
+        CleaningTypeCanAddList,
+        verbose_name="Список что можно добавить"
     )
     name=models.CharField(max_length=500, verbose_name='Категория(что можно добавить в уборку)')
     price=models.DecimalField(max_digits=9,decimal_places=2, verbose_name='Цена')
@@ -124,30 +116,42 @@ class CleaningTypeCanAdd(models.Model):
     def get_absolute_url(self):
         return reverse("cleaning_type_can_add_detail", kwargs={"pk": self.pk})
     
-    
-    
-class CleaningTypeCanAddList(models.Model):
-    cleaning_type_can_add=models.ForeignKey(
-        CleaningTypeCanAdd,
-        on_delete=models.PROTECT,
-        related_name='can_add_list',
-        verbose_name='Категория(что можно добавить в уборку)'
-    )    
-    name=models.CharField(max_length=1000, verbose_name='что можно добавить в уборку(список)')
-    created=models.DateTimeField(auto_now_add=True, verbose_name='Создано')
-    updated=models.DateTimeField(auto_now=True, verbose_name='Обновлено')
-    is_published=models.BooleanField(default=True, verbose_name='Опубликовано')
-    
-    class Meta:
-        verbose_name='Можно добавить(список)'
-        verbose_name_plural='Можно добавить(списки)'
-    
-    def __str__(self):
-        return self.name
-    
-    def get_absolute_url(self):
-        return reverse("cleaning_type_can_add_list_detail", kwargs={"pk": self.pk})
-    
+     
+     
+     
+class CleaningTypeLocation(models.Model):
+     cleaning_type=models.ForeignKey(
+         CleaningType,
+         on_delete=models.PROTECT,
+         verbose_name='Тип уборки',
+         related_name='location'
+     )
+     include=models.ManyToManyField(
+         CleaningTypeInclude,
+         verbose_name='Что входит',
+         blank=True
+     )
+     can_add=models.ManyToManyField(
+         CleaningTypeCanAdd,
+         verbose_name='Можно добавить',
+         blank=True
+     )
+     name=models.CharField(max_length=150, verbose_name='Локация')
+     subname=models.CharField(max_length=150, verbose_name='К какому типу уборки')
+     created=models.DateTimeField(auto_now_add=True, verbose_name='Создано')
+     updated=models.DateTimeField(auto_now=True, verbose_name='Обновлено')
+     is_published=models.BooleanField(default=True, verbose_name='Опубликовано')
+     
+     class Meta:
+         verbose_name='Локация типа уборки'
+         verbose_name_plural='Локации типов уборки'
+     
+     def __str__(self):
+         return f"{self.name}{self.subname}"
+     
+     def get_absolute_url(self):
+         return reverse("cleaning_type_location_detail", kwargs={"pk": self.pk})  
+      
 
 
 class FurnitureCluttered(models.Model):

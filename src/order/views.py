@@ -1,11 +1,13 @@
-from rest_framework import viewsets
-from django.db.models import Prefetch
+from rest_framework import viewsets, permissions
 from .models import *
 from .serializers import *
 
 class OrderAPIView(viewsets.ModelViewSet):
     queryset=Order.objects.all()
     serializer_class=OrderSerializer
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
     
 class CleaningTypeAPIView(viewsets.ModelViewSet):
     queryset=CleaningType.objects.all()
@@ -43,10 +45,16 @@ class PollutionDegreeAPIView(viewsets.ModelViewSet):
     queryset=PollutionDegree.objects.all()
     serializer_class=PollutionDegreeSerialier
     
-class ProomoAPIView(viewsets.ModelViewSet):
+class PromoAPIView(viewsets.ModelViewSet):
     queryset=Promo.objects.all()
     serializer_class=PromoSerializer
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
     
 class OrderStatusAPIView(viewsets.ModelViewSet):
     queryset=OrderStatus.objects.all()
     serializer_class=OrderStatusSerializer
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]

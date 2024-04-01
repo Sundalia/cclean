@@ -99,10 +99,7 @@ class CleaningTypeIncludeSerializer(serializers.ModelSerializer):
         model=CleaningTypeInclude
         fields=(
             'name',
-            'include_list',
-            'created',
-            'updated',
-            'is_published'
+            'include_list'
         )
         
 class CleaningTypeIncludeListSerializer(serializers.ModelSerializer):
@@ -111,10 +108,7 @@ class CleaningTypeIncludeListSerializer(serializers.ModelSerializer):
         model=CleaningTypeIncludeList
         fields=(
             'cleaning_type_include',
-            'name',
-            'created',
-            'updated',
-            'is_published'
+            'name'
         )
         
 class CleaningTypeCanAddSerializer(serializers.ModelSerializer):
@@ -130,10 +124,7 @@ class CleaningTypeCanAddSerializer(serializers.ModelSerializer):
         fields=(
             'name',
             'price',
-            'can_add_list',
-            'created',
-            'updated',
-            'is_published'
+            'can_add_list'
         )
         
 class CleaningTypeCanAddListSerializer(serializers.ModelSerializer):
@@ -142,10 +133,7 @@ class CleaningTypeCanAddListSerializer(serializers.ModelSerializer):
         model=CleaningTypeCanAddList
         fields=(
             'can_add',
-            'name',
-            'created',
-            'updated',
-            'is_published'
+            'name'
         )
         
         
@@ -166,10 +154,7 @@ class CleaningTypeLocationSerializer(serializers.ModelSerializer):
             'name',
             'subname',
             'include',
-            'can_add',
-            'created',
-            'updated',
-            'is_published'
+            'can_add'
         )
         
         
@@ -184,10 +169,8 @@ class  CleaninigTypeSerializer(serializers.ModelSerializer):
         fields=(
             'name',
             'description',
+            'subdescription',
             'location',
-            'price',
-            'created',
-            'updated',
-            'is_published'
+            'price'
     )
         

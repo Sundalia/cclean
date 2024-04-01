@@ -1,5 +1,9 @@
 <template>
-    <h1>OrderPage</h1>
+    <q-layout>
+        <q-page>
+            <p>OrderPage</p>>
+        </q-page>
+    </q-layout>
 </template>
 
 <script>

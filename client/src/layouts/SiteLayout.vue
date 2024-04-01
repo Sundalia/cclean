@@ -9,20 +9,19 @@
 </template>
 
 <script>
-import HeaderItem from 'src/components/HeaderItem.vue';
-import FooterItem from 'src/components/FooterItem.vue';
+import HeaderItem from 'src/components/site_components/HeaderItem.vue'
+import FooterItem from 'src/components/site_components/FooterItem.vue'
 
 export default({
   name: 'SiteLayout',
   components: {
     HeaderItem,
-    FooterItem
+    FooterItem,
 }
 })
 </script>
 
-<style lang="scss">
-@import '../css/quasar.variables.scss';
+<style lang="scss" scope>
 
 .site_layout {
   background-color: $background;
@@ -50,6 +49,7 @@ export default({
   display: flex;
   text-align: center;
   justify-content: center;
+  margin: 2%;
 
 }
 
@@ -70,5 +70,31 @@ export default({
   font-family: 'Comfortaa';
   font-weight: bold;
   width: 70%;
+}
+
+.what_include_container{
+  display: flex;
+  justify-content: center;
+  margin: 2%;
+}
+
+.what_include_grid{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  width: 100%;
+}
+
+@media screen and (max-width: 820px){
+  .what_include_grid{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 520px){
+  .what_include_grid{
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 </style>

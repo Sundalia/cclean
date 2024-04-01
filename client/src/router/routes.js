@@ -23,16 +23,22 @@ const routes = [
     path: '/account',
     component: () => import('layouts/AccountLayout.vue'),
     children: [
-      { path: 'order', component: () =>import('pages/Account/OrderPage.vue') }
+      { path: 'order', component: () =>import('pages/Account/OrderPage.vue') },
+      { path: 'order_list', component: () =>import('pages/Account/MyOrdersPage.vue') },
+      { path: 'promo', component: () =>import('pages/Account/PromoPage.vue') },
+      { path: 'pay', component: () =>import('pages/Account/PayPage.vue') },
     ],
   },
-  // {
-  //   path:'/auth',
-  //   component: () => import('layouts/EmptyLayout.vue'),
-  //   children: [
-  //     { path: 'auth', component: () => import('pages/Empty/AuthenticationPage.vue') },
-  //   ]
-  // },
+  {
+    path:'/login',
+    component: () => import('layouts/EmptyLayout.vue'),
+    children: [
+      { path: 'authentication', component: () => import('pages/Empty/AuthenticationPage.vue') },
+      { path: 'authentication_cleaner', component: () => import('pages/Empty/AuthenticationCleanerPage.vue') },
+      { path: 'registration', component: () => import('pages/Empty/RegistrationPage.vue') },
+      { path: 'registration_cleaner', component: () => import('pages/Empty/RegistrationCleanerPage.vue') },
+    ]
+  },
 
   // Always leave this as last one,
   // but you can also remove it
